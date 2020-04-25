@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\student;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -13,7 +14,8 @@ class StudentController extends Controller
      */
     public function index()
     {
-        
+        $students = Student::all();
+        return view('student', [ 'students' => $students, 'layout' => 'index']);
     }
 
     /**
@@ -23,7 +25,8 @@ class StudentController extends Controller
      */
     public function create()
     {
-        //
+        $students = Student::all();
+        return view('student', [ 'students' => $students, 'layout' => 'create']);
     }
 
     /**
@@ -32,9 +35,16 @@ class StudentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request, Student $student)
+    {  
+        
+        $student->cne = $request->input('cne');
+        $student->first_name = $request->input('first_name');
+        $student->last_name = $request->input('last_name');
+        $student->age = $request->input('age');
+        $student->speciality = $request->input('speciality');
+        $student->save();
+        return redirect('/');
     }
 
     /**
@@ -45,9 +55,10 @@ class StudentController extends Controller
      */
     public function show($id)
     {
-        //
+        $student = Student::find('id');
+        $students = Student::all();
+        return view('student',['students'=> $students, 'student'=> $student, 'layout'=>'edit']);
     }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -56,7 +67,9 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        //
+        $student = Student::find($id);
+        $students = Student::all() ;
+        return view('student',['students'=>$students,'student'=>$student,'layout'=>'edit']);
     }
 
     /**
@@ -68,7 +81,14 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $student = Student::find($id);
+        $student->cne = $request->input('cne');
+        $student->first_name = $request->input('first_name');
+        $student->last_name = $request->input('last_name');
+        $student->age = $request->input('age');
+        $student->speciality = $request->input('speciality');
+        $student->save();
+        return redirect('/');
     }
 
     /**
@@ -79,6 +99,8 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $student = Student::find($id);
+        $student->delete();
+        return redirect('/');
     }
 }
